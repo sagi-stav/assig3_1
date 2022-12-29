@@ -15,7 +15,6 @@ public class Gamer extends Thread {
     }
 
     public void run (){
-        while (true)
             play();
     }
     public synchronized void play() {
