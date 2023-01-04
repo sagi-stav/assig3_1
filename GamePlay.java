@@ -5,13 +5,15 @@ import java.util.Random;
 public class GamePlay {
     private boolean coin_available_;
     private int rounds_counter_;
+
     private Random random = new Random();
+
     GamePlay() {
-        coin_available_ = true;
+        coin_available_ = false;
         rounds_counter_ = 0;
     }
 
-    public int getNumOfRounds() {
+    public synchronized int getNumOfRounds() {
         return rounds_counter_;
     }
 
@@ -21,19 +23,21 @@ public class GamePlay {
             notifyAll();
         }
     }
-    public synchronized int flipCoin(){
-        while (!coin_available_){
+
+    public synchronized int flipCoin() {
+        while (!coin_available_) {
             try {
-                System.out.println(Thread.currentThread().getName()+" is waiting for coin");
+                System.out.println(Thread.currentThread().getName() + " is waiting for coin");
                 wait();
             } catch (InterruptedException e) {
             }
         }
-        System.out.println(Thread.currentThread().getName()+" is flipping coin");
-        coin_available_=false;
+        System.out.println(Thread.currentThread().getName() + " is flipping coin");
+        coin_available_ = false;
         rounds_counter_++;
-        int r = random.nextInt(1);
-        System.out.println("the random number is: "+r);
+        int r = random.nextInt(2);
+        System.out.println("the random number is: " + r);
+        coin_available_ = true;
         notifyAll();
         return r;
     }
